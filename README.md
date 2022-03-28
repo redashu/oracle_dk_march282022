@@ -203,4 +203,36 @@ docker  stop  ashuc1
 ashu@docker-new-vm ~]$ docker  start  ashuc1
 ashuc1
 ```
-### 
+### accessing container 
+
+```
+docker  exec  -it  ashuc1    sh 
+/ # cat  /etc/os-release 
+NAME="Alpine Linux"
+ID=alpine
+VERSION_ID=3.15.2
+PRETTY_NAME="Alpine Linux v3.15"
+HOME_URL="https://alpinelinux.org/"
+BUG_REPORT_URL="https://bugs.alpinelinux.org/"
+/ # ls
+bin    dev    etc    home   lib    media  mnt    opt    proc   root   run    sbin   srv    sys    tmp    usr    var
+/ # ps  -e
+PID   USER     TIME  COMMAND
+    1 root      0:00 ping google.com
+    6 root      0:00 sh
+   13 root      0:00 ps -e
+/ # exit
+[ashu@docker-new-vm ~]$ 
+
+```
+
+### stop and remove containers 
+
+```
+ 
+[ashu@docker-new-vm ~]$ docker  stop  ashuc1
+ashuc1
+[ashu@docker-new-vm ~]$ docker  rm  ashuc1 
+ashuc1
+```
+
