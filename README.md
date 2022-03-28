@@ -319,7 +319,104 @@ Last metadata expiration check: 0:00:06 ago on Mon Mar 28 10:16:09 2022.
 Dependencies resolved.
 ```
 
+## Java code to docker image 
+
+### scode 
+
+```
+class myclass { 
+    public static void main(String args[]) 
+    { 
+        // test expression 
+        while (true) { 
+            System.out.println("Hello World"); 
+  
+            // update expression 
+        } 
+    } 
+} 
+```
+
+### dockerfile 
+
+```
+FROM openjdk 
+LABEL name=ashutoshh
+RUN mkdir /javacode 
+COPY  hello.java  /javacode/
+WORKDIR /javacode
+#  to change directory during image build time 
+RUN javac  hello.java 
+#  compiled source code 
+CMD ["java","myclass"]
+# setting default process 
 
 
+```
+
+### build image 
+
+```
+ docker  build -t ashujava:v1  . 
+Sending build context to Docker daemon  3.072kB
+Step 1/7 : FROM openjdk
+Trying to pull repository docker.io/library/openjdk ... 
+latest: Pulling from docker.io/library/openjdk
+1de6f411eccf: Pull complete 
+9fbc23973719: Pull complete 
+60dc74147863: Pull complete 
+Digest: sha256:d3ba674d6cbaf782030d708c3bd5eec291f56de2473a6136b9ab427753810482
+Status: Downloaded newer image for openjdk:latest
+ ---> 30a9bb3b2109
+Step 2/7 : LABEL name=ashutoshh
+ ---> Running in b8cecef63e4d
+Removing intermediate container b8cecef63e4d
+ ---> 7888c1ca463b
+Step 3/7 : RUN mkdir /javacode
+ ---> Running in 1c686c3bb379
+Removing intermediate container 1c686c3bb379
+ ---> 341ff62841fd
+Step 4/7 : COPY  hello.java  /javacode/
+ ---> 4347ee5e4225
+Step 5/7 : WORKDIR /javacode
+ ---> Running in 6b551189a9cc
+Removing intermediate container 6b551189a9cc
+ ---> 5a6b940f8098
+Step 6/7 : RUN javac  hello.java
+ ---> Running in 3fc74bf33030
+Removing intermediate container 3fc74bf33030
+ ---> 60777ef1f121
+Step 7/7 : CMD ["java","myclass"]
+ ---> Running in 4728bc68c7f7
+Removing intermediate container 4728bc68c7f7
+ ---> 3f1e21f1af0c
+Successfully built 3f1e21f1af0c
+Successfully tagged ashujava:v1
+```
+
+## image sharing with Docker HUb 
+
+<img src="hub.png">
+
+### pushing image 
+```
+docker  images  |   grep -i ashu
+ashujava            v1                  3f1e21f1af0c        23 minutes ago      471MB
+ashupython          2.0                 924a988ab1c2        About an hour ago   420MB
+ashupython          1.0                 1e8cd06395d8        2 hours ago         919MB
+[ashu@docker-new-vm java_images]$ 
+[ashu@docker-new-vm java_images]$ 
+[ashu@docker-new-vm java_images]$ docker  tag  ashujava:v1    docker.io/dockerashu/ashujavacode:1.1  
+
+[ashu@docker-new-vm java_images]$ docker  login 
+Login with your Docker ID to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com to create one.
+Username: dockerashu
+Password: 
+WARNING! Your password will be stored unencrypted in /home/ashu/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+```
 
 
