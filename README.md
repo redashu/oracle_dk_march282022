@@ -294,6 +294,30 @@ CONTAINER ID        IMAGE               COMMAND                  CREATED        
 97c5f569563c        ashupython:1.0      "python /codes/abc.py"   9 seconds ago       Up 8 seconds                            ashuc1
 ```
 
+### Dockerfile --
+
+```
+$ ls
+abc.py  code1.dockerfile  Dockerfile  helloc1.txt
+[ashu@docker-new-vm python_images]$ docker  build  -t  ashupython:2.0  -f  code1.dockerfile  .  
+Sending build context to Docker daemon  5.632kB
+Step 1/7 : FROM oraclelinux:8.4
+ ---> 97e22ab49eea
+Step 2/7 : LABEL name=ashutoshh
+ ---> Running in 731309d3a56a
+Removing intermediate container 731309d3a56a
+ ---> d0ac1ea8de2a
+Step 3/7 : LABEL email=ashutoshh@linux.com
+ ---> Running in 8c552a03e1da
+Removing intermediate container 8c552a03e1da
+ ---> 970edcc820fb
+Step 4/7 : RUN  yum install python3 -y
+ ---> Running in 5e5370845ba5
+Oracle Linux 8 BaseOS Latest (x86_64)           178 MB/s |  43 MB     00:00    
+Oracle Linux 8 Application Stream (x86_64)      191 MB/s |  32 MB     00:00    
+Last metadata expiration check: 0:00:06 ago on Mon Mar 28 10:16:09 2022.
+Dependencies resolved.
+```
 
 
 
