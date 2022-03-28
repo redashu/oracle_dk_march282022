@@ -236,3 +236,66 @@ ashuc1
 ashuc1
 ```
 
+## Docker image building 
+
+<img src="build.png">
+
+### first docker image 
+```
+]$ ls
+abc.py  Dockerfile
+[ashu@docker-new-vm python_images]$ docker  build  -t  ashupython:1.0  . 
+Sending build context to Docker daemon  3.072kB
+Step 1/6 : FROM python
+Trying to pull repository docker.io/library/python ... 
+latest: Pulling from docker.io/library/python
+5492f66d2700: Pull complete 
+540ff8c0841d: Pull complete 
+a0bf850a0df0: Pull complete 
+d751dc38ae51: Pull complete 
+9720a112e886: Pull complete 
+f97b81fbdbd9: Pull complete 
+a70c58953c25: Pull complete 
+6f7b858c1584: Pull complete 
+74b4b07d81e4: Pull complete 
+Digest: sha256:6441e2f0bd2e566de0df6445cb8e7e395ea1a376dd702de908d70401d3700961
+Status: Downloaded newer image for python:latest
+ ---> ee2a4300ffa2
+Step 2/6 : LABEL name=ashutoshh
+
+ ---> Running in b17377d4f630
+Removing intermediate container b17377d4f630
+ ---> 80f835dd5033
+Step 3/6 : LABEL email=ashutoshh@linux.com
+ ---> Running in 45c50dc7b136
+Removing intermediate container 45c50dc7b136
+ ---> f68ea74e5e91
+Step 4/6 : RUN  mkdir  /codes
+ ---> Running in cc9d329dcda1
+Removing intermediate container cc9d329dcda1
+ ---> 464de7ec450d
+Step 5/6 : COPY  abc.py  /codes/
+ ---> ff8e5505cf63
+Step 6/6 : CMD ["python","/codes/abc.py"]
+ ---> Running in 2243b517c118
+Removing intermediate container 2243b517c118
+ ---> 1e8cd06395d8
+Successfully built 1e8cd06395d8
+Successfully tagged ashupython:1.0
+```
+
+### create container 
+
+```
+docker  run  -it -d  --name ashuc1 ashupython:1.0  
+97c5f569563c57e0b651f2d057895c601742bef9006739d22c8b26cfea14d00b
+[ashu@docker-new-vm python_images]$ docker  ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+97c5f569563c        ashupython:1.0      "python /codes/abc.py"   9 seconds ago       Up 8 seconds                            ashuc1
+```
+
+
+
+
+
+
