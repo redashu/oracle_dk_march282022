@@ -139,3 +139,7 @@ PING fb.com (157.240.18.35): 56 data bytes
 
 <img src="nscg.png">
 
+```
+  docker run -itd  --name cv1  --memory 200M  alpine  ping fb.com 
+  262  docker run -itd  --name cv2  --memory 200M  --cpu-shares=30 alpine  ping fb.com 
+```
