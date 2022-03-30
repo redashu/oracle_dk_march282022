@@ -126,5 +126,28 @@ fe5bd6ce6986e5da0bb84416ef6bd1cf22f8c5af0f0865ed7bc3a6ee2f259d7a
 [ashu@docker-new-vm myimages]$ docker  network rm ashubr2
 ashubr2
 ```
+### in custom bridge DNS in containers also working 
 
+```
+[ashu@docker-new-vm myimages]$ docker run -itd --name ashuc1 --network ashubr2  alpine 
+c5b80726949cf9ceb5b82fe396b150910c3422d6e53f5f71314733ed317b282a
+[ashu@docker-new-vm myimages]$ 
+[ashu@docker-new-vm myimages]$ docker run -itd --name ashuc2 --network ashubr2 --ip 192.169.101.10  alpine 
+f125fd5c33ff32225bbf95f11f84a18289c69f1cc9d838be4a764d31f3a3134a
+[ashu@docker-new-vm myimages]$ 
+[ashu@docker-new-vm myimages]$ 
+[ashu@docker-new-vm myimages]$ 
+[ashu@docker-new-vm myimages]$ 
+[ashu@docker-new-vm myimages]$ docker  exec -ti ashuc1  sh 
+/ # ping  ashuc2
+PING ashuc2 (192.169.101.10): 56 data bytes
+64 bytes from 192.169.101.10: seq=0 ttl=64 time=0.103 ms
+64 bytes from 192.169.101.10: seq=1 ttl=64 time=0.063 ms
+64 bytes from 192.169.101.10: seq=2 ttl=64 time=0.058 ms
+^C
+--- ashuc2 ping statistics ---
+3 packets transmitted, 3 packets received, 0% packet loss
+round-trip min/avg/max = 0.058/0.074/0.103 ms
+/ # exit
+```
 
