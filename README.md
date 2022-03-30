@@ -184,4 +184,71 @@ app=hello
 HOME=/root
 
 ```
+### storage 
 
+<img src="st.png">
+
+### create volume 
+
+```
+ashu@docker-new-vm myimages]$ docker  volume  create  ashuvol1 
+ashuvol1
+```
+
+### list volumes 
+
+```
+ docker  volume  lsDRIVER              VOLUME NAME
+local               ashuvol1
+local               skvol1
+
+ docker  volume  inspect ashuvol1 
+[
+    {
+        "CreatedAt": "2022-03-30T10:58:23Z",
+        "Driver": "local",
+        "Labels": {},
+        "Mountpoint": "/var/lib/docker/volumes/ashuvol1/_data",
+        "Name": "ashuvol1",
+        "Options": {},
+        "Scope": "local"
+    }
+]
+
+
+```
+
+### create volume 
+
+```
+docker  run -it --name ashuc1  -v  ashuvol1:/data:rw  alpine 
+/ # 
+/ # 
+/ # ls 
+bin    dev    home   media  opt    root   sbin   sys    usr
+data   etc    lib    mnt    proc   run    srv    tmp    var
+/ # cd  /data/
+/data # ls
+/data # mkdir  hello docker  
+/data # ls
+docker  hello
+/data # touch a.txt 
+/data # ls
+a.txt   docker  hello
+/data # exit
+[ashu@docker-new-vm myimages]$ docker rm ashuc1
+ashuc1
+[ashu@docker-new-vm myimages]$ docker  run --name ashuc2 -it -v ashuvol1:/new:ro  oraclelinux:8.4 
+[root@b9d4c9a86f3c /]# 
+[root@b9d4c9a86f3c /]# 
+[root@b9d4c9a86f3c /]# ls
+bin   dev  home  lib64  mnt  opt   root  sbin  sys  usr
+boot  etc  lib   media  new  proc  run   srv   tmp  var
+[root@b9d4c9a86f3c /]# cd  /new/
+[root@b9d4c9a86f3c new]# ls
+a.txt  docker  hello
+[root@b9d4c9a86f3c new]# mkdir hiii
+mkdir: cannot create directory 'hiii': Read-only file system
+[root@b9d4c9a86f3c new]# exit
+exit
+```
