@@ -117,3 +117,25 @@ Removing login credentials for phx.ocir.io
 [root@ip-172-31-85-52 ~]# 
 
 ```
+
+## Docker Restart policy 
+
+<img src="res.png">
+
+### changing restart policy of existing container 
+
+```
+docker  update  ashuc11  --restart=always
+```
+
+### give restart policy to a new container 
+
+```
+docker run --name ashuc9 --restart always  alpine  ping fb.com  
+PING fb.com (157.240.18.35): 56 data bytes
+```
+
+## namespaces and cgroups 
+
+<img src="nscg.png">
+
