@@ -151,3 +151,37 @@ round-trip min/avg/max = 0.058/0.074/0.103 ms
 / # exit
 ```
 
+## webapp 
+
+<img src="webapp.png">
+
+### Docker build image 
+
+```
+
+$ ls  -a
+.   deploy.sh   .dockerignore    project-html-website
+..  Dockerfile  html-sample-app  project-website-template
+[ashu@docker-new-vm customer]$ docker  build  -t  customer:ashuappv1  . 
+Sending build context to Docker daemon  3.934MB
+Step 1/13 : FROM oraclelinux:8.4
+Trying to pull repository docker.io/library/oraclelinux ... 
+8.4: Pulling from docker.io/library/oraclelinux
+a4df6f21af84: Pull complete 
+Digest: sha256:b81d5b0638bb67030b207d2858
+
+```
+
+### creating container without env 
+
+```
+docker run -itd --name ashuc1 -p 1111:80 customer:ashuappv1
+a28cb6afb0e03418532729e89debb91b6f452adf7f715d48fd01abdd11e8bbc1
+[ashu@docker-new-vm customer]$ docker  exec ashuc1 env 
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+HOSTNAME=a28cb6afb0e0
+app=hello
+HOME=/root
+
+```
+
