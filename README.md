@@ -309,3 +309,103 @@ bin    dev    etc    home   lib    media  mnt    opt    proc   root   run    sbi
 kubectl describe pod  ashupod1 
 ```
 
+### POD additional info --
+
+## create pod without yAML / JSON 
+
+```
+ kubectl  run  ashupod1  --image=alpine --command ping fb.com  
+pod/ashupod1 created
+[ashu@docker-new-vm k8s_apps]$ kubectl  get po 
+NAME       READY   STATUS    RESTARTS   AGE
+ashupod1   1/1     Running   0          4s
+
+```
+
+### generate YAML / json automatically 
+
+```
+ kubectl  run  ashupod1  --image=alpine --command ping fb.com   --dry-run=client  -o yaml 
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: ashupod1
+  name: ashupod1
+spec:
+  containers:
+  - command:
+    - ping
+
+
+```
+
+### generate pod yaml / json 
+
+```
+ kubectl  run  ashupod1  --image=alpine --command ping fb.com   --dry-run=client  -o yaml  >auto.yaml
+  511  kubectl  run  ashupod1  --image=alpine --command ping fb.com   --dry-run=client  -ojson 
+  512  kubectl  run  ashupod1  --image=alpine --command ping fb.com   --dry-run=client  -o json >auto.json 
+```
+
+### json deploy 
+
+```
+ kubectl apply -f auto.json 
+pod/ashupod1 created
+[ashu@docker-new-vm k8s_apps]$ 
+[ashu@docker-new-vm k8s_apps]$ kubectl  get po 
+NAME         READY   STATUS    RESTARTS   AGE
+ashupod1     1/1     Running   0          4s
+```
+
+### Deleting all pods 
+
+```
+ kubectl delete pods --all
+pod "ashupod1" deleted
+pod "sameerpod1" deleted
+
+```
+
+### NEtworking in k8s 
+
+```
+ kubectl run  ashuwebapp --image=dockerashu/customerapp:30thmarch2022 --port 80 --dry-run=client  -o yaml >webapp.yaml 
+ 
+```
+
+### create pod 
+
+```
+ kubectl apply -f webapp.yaml 
+pod/ashuwebapp created
+[ashu@docker-new-vm k8s_apps]$ kubectl  get pods
+NAME            READY   STATUS              RESTARTS   AGE
+ashuwebapp      0/1     ContainerCreating   0          5s
+chethanwebapp   0/1     ContainerCreating   0          1s
+ganeshwebapp    0/1     ContainerCreating   0          0s
+[ashu@docker-new-vm k8s_apps]$ kubectl  get pods
+NAME            READY   STATUS    RESTARTS   AGE
+ashuwebapp      1/1     Running   0          16s
+```
+
+### Container networking 
+
+<img src="cni.png">
+
+### CNI plugins to implement in k8s 
+
+<img src="plugin.png">
+
+### case 1 tunnel based access from kubernetes client machine 
+
+```
+ kubectl port-forward  ashuwebapp  1234:80 
+Forwarding from 127.0.0.1:1234 -> 80
+Forwarding from [::1]:1234 -> 80
+Handling connection for 1234
+
+```
+
