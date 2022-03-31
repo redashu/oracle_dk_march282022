@@ -412,4 +412,92 @@ Handling connection for 1234
 curl http://127.0.0.1:1234
 
 ```
+### Internal LB in k8s -- using Service Resources 
+
+<img src="svc.png">
+
+### service will be using label to find related PODs 
+
+<img src="lb.png">
+
+### service type in k8s 
+
+<img src="stype.png">
+
+### NodePort 
+
+<img src="np.png">
+
+### webapp pod with env 
+
+```
+ kubectl   exec  ashuwebapp  env 
+kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl exec [POD] -- [COMMAND] instead.
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+HOSTNAME=ashuwebapp
+app=webapp3
+KUBERNETES_PORT_443_TCP_ADDR=10.96.0.1
+KUBERNETES_SERVICE_HOST=10.96.0.1
+
+```
+
+### pod labels 
+
+<img src="label.png">
+
+### checking labels 
+
+```
+ kubectl  get po ashuwebapp  
+NAME         READY   STATUS    RESTARTS   AGE
+ashuwebapp   1/1     Running   0          5m26s
+[ashu@docker-new-vm k8s_apps]$ kubectl  get po ashuwebapp   --show-labels
+NAME         READY   STATUS    RESTARTS   AGE     LABELS
+ashuwebapp   1/1     Running   0          5m31s   run=ashuwebapp
+[ashu@docker-new-vm k8s_apps]$ kubectl  apply -f webapp.yaml 
+pod/ashuwebapp configured
+[ashu@docker-new-vm k8s_apps]$ kubectl  get po ashuwebapp   --show-labels
+NAME         READY   STATUS    RESTARTS   AGE     LABELS
+ashuwebapp   1/1     Running   0          5m50s   x=helloashu
+[ashu@docker-new-vm k8s_apps]$ 
+
+```
+
+### creating Nodeport service 
+
+```
+kubectl  create  service  
+Create a service using a specified subcommand.
+
+Aliases:
+service, svc
+
+Available Commands:
+  clusterip    Create a ClusterIP service
+  externalname Create an ExternalName service
+  loadbalancer Create a LoadBalancer service
+  nodeport     Create a NodePort service
+  
+  kubectl  create  service  nodeport  ashulb1  --tcp  1234:80  --dry-run=client -o yaml          >np.yaml 
+  
+```
+
+### deploy service 
+
+```
+91  kubectl  apply -f np.yaml 
+  492  kubectl   get  service 
+  493  history 
+  494  kubectl  get po ashuwebapp   --show-labels
+  495  kubectl   get  service 
+  496  hsitor
+  497  history 
+[ashu@docker-new-vm k8s_apps]$ kubectl  get svc
+NAME                     TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+ashulb1                  NodePort    10.109.229.129   <none>        1234:31869/TCP   10m
+chethanlb1               NodePort    10.108.245.43    <none>        7777:31278/TCP   4m19s
+kubernetes               ClusterIP   10.96.0.1       
+
+```
+
 
