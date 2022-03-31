@@ -169,3 +169,64 @@ services:
 docker  run -itd --name webui -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock    --restart  always portainer/portainer
 ```
 
+## Problems with Container runtime 
+
+<img src="prob.png">
+
+## Intro to k8s 
+
+<img src="k8s.png">
+
+### info k8s 
+
+<img src="infok8s.png">
+
+### app deployment showcase 
+
+<img src="dep.png">
+
+### k8s arch level 1 
+
+<img src="l1.png">
+
+### system 
+
+<img src="bin.png">
+
+### kube-apiserver 
+
+<img src="api.png">
+
+## Kubectl Install --
+
+[ks_client_install](https://kubernetes.io/docs/tasks/tools/)
+
+### sharing cred file with k8s clients 
+
+### file location on master Node 
+
+```
+ cd  /etc/kubernetes/
+[root@ip-172-31-90-99 kubernetes]# ls
+admin.conf 
+```
+
+## Download admin.conf file on the machine you want to configure as k8s client 
+
+### use it like this 
+
+```
+ kubectl  get nodes  --kubeconfig  admin.conf 
+NAME                            STATUS   ROLES                  AGE    VERSION
+ip-172-31-29-225.ec2.internal   Ready    <none>                 7d4h   v1.23.5
+ip-172-31-85-52.ec2.internal    Ready    <none>                 28d    v1.23.4
+ip-172-31-90-99.ec2.internal    Ready    control-plane,master   28d    v1.23.4
+```
+
+### copy admin.conf  to default location  in LInux CLient  and mac client 
+
+```
+ cp admin.conf   ~/.kube/config  
+```
+
+
