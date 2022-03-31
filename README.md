@@ -238,3 +238,74 @@ CoreDNS is running at https://3.233.160.167:6443/api/v1/namespaces/kube-system/s
 
 To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
 ```
+
+
+### Pod concpet 
+
+<img src="pod.png">
+
+### pod example `
+
+```
+apiVersion: v1 
+kind: Pod 
+metadata: # info about kind type 
+ name: ashupod1 # name of pod 
+spec:  # details about application 
+ containers:
+ - name: ashuc1 # u can use it 
+   image: alpine 
+   command: ["sh","-c","ping fb.com"]
+
+```
+
+### Deploy pod 
+
+```
+
+[ashu@docker-new-vm k8s_apps]$ kubectl apply -f ashupod1.yaml 
+pod/ashupod1 unchanged
+[ashu@docker-new-vm k8s_apps]$ kubectl get po 
+NAME          READY   STATUS    RESTARTS   AGE
+amitpod1      1/1     Running   0          2m9s
+ashupod1      1/1     Running   0          5m8s
+ganeshpod1    1/1     Running   0          3m59s
+muthupod1     1/1     Running   0         
+```
+
+### ip of POD 
+
+```
+kubectl get po -o wide
+NAME          READY   STATUS    RESTARTS   AGE     IP                NODE                            NOMINATED NODE   READINESS GATES
+amitpod1      1/1     Running   0          5m19s   192.168.203.248   ip-172-31-85-52.ec2.internal    <none>           <none>
+ashupod1      1/1     Running   0          8m18s   192.168.203.239   ip-172-31-85-52.ec2.internal    <none>           <none>
+chethanpod1   1/1     Running   0          76s     192.168.93.42     ip-172-31-29-225.ec2.internal   <none>           <none>
+ganeshpod1    1/1     Running   0          7m9s    192.168.203.208   ip-172-31-85-52.ec2.internal    <none>           <none>
+muthupod1     1/1     Running   0          7m49s  
+```
+
+### accessing container filesyste 
+
+```
+kubectl  exec  -it  ashupod1  -- sh 
+/ # 
+/ # 
+/ # cat /etc/os-release 
+NAME="Alpine Linux"
+ID=alpine
+VERSION_ID=3.15.3
+PRETTY_NAME="Alpine Linux v3.15"
+HOME_URL="https://alpinelinux.org/"
+BUG_REPORT_URL="https://bugs.alpinelinux.org/"
+/ # ls
+bin    dev    etc    home   lib    media  mnt    opt    proc   root   run    sbin   srv    sys    tmp    usr    var
+/ # exit
+```
+
+### checking container internal details 
+
+```
+kubectl describe pod  ashupod1 
+```
+
