@@ -407,5 +407,9 @@ Forwarding from 127.0.0.1:1234 -> 80
 Forwarding from [::1]:1234 -> 80
 Handling connection for 1234
 
+### to access using curl in seperate termianl 
+
+curl http://127.0.0.1:1234
+
 ```
 
