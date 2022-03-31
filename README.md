@@ -162,3 +162,10 @@ services:
   ports:
   - 7744:80 
 ```
+
+## webUI 
+
+```
+docker  run -itd --name webui -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock    --restart  always portainer/portainer
+```
+
