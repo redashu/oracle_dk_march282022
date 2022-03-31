@@ -229,4 +229,12 @@ ip-172-31-90-99.ec2.internal    Ready    control-plane,master   28d    v1.23.4
  cp admin.conf   ~/.kube/config  
 ```
 
+### check client side connection 
 
+```
+ kubectl  cluster-info 
+Kubernetes control plane is running at https://3.233.160.167:6443
+CoreDNS is running at https://3.233.160.167:6443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+```
