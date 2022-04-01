@@ -370,4 +370,133 @@ ashusvc1     LoadBalancer   10.96.190.176   <pending>     80:32281/TCP   12s
 
 ```
 
+### Dashboard in k8s 
 
+```
+https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/
+
+```
+
+### deploy dashboard 
+
+```
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.5.0/aio/deploy/recommended.yaml
+namespace/kubernetes-dashboard created
+serviceaccount/kubernetes-dashboard created
+service/kubernetes-dashboard created
+secret/kubernetes-dashboard-certs created
+secret/kubernetes-dashboard-csrf created
+secret/kubernetes-dashboard-key-holder created
+configmap/kubernetes-dashboard-settings created
+role.rbac.authorization.k8s.io/kubernetes-dashboard created
+clusterrole.rbac.authorization.k8s.io/kubernetes-dashboard created
+rolebinding.rbac.authorization.k8s.io/kubernetes-dashboard created
+clusterrolebinding.rbac.authorization.k8s.io/kubernetes-dashboard created
+deployment.apps/kubernetes-dashboard created
+service/dashboard-metrics-scraper created
+deployment.apps/dashboard-metrics-scraper created
+learntechb@cloudshell:~ (us-phoenix-1)$ kubectl get ns
+NAME                   STATUS   AGE
+default                Active   59m
+kube-node-lease        Active   59m
+kube-public            Active   59m
+kube-system            Active   59m
+kubernetes-dashboard   Active   19s
+```
+
+### changing svc type 
+
+```
+ kubectl  -n kubernetes-dashboard  get deploy 
+NAME                        READY   UP-TO-DATE   AVAILABLE   AGE
+dashboard-metrics-scraper   1/1     1            1           71s
+kubernetes-dashboard        1/1     1            1           71s
+learntechb@cloudshell:~ (us-phoenix-1)$ kubectl  -n kubernetes-dashboard  get po
+NAME                                        READY   STATUS    RESTARTS   AGE
+dashboard-metrics-scraper-c45b7869d-5gh5s   1/1     Running   0          81s
+kubernetes-dashboard-764b4dd7-pfm29         1/1     Running   0          81s
+learntechb@cloudshell:~ (us-phoenix-1)$ kubectl  -n kubernetes-dashboard  get svc
+NAME                        TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+dashboard-metrics-scraper   ClusterIP   10.96.255.141   <none>        8000/TCP   86s
+kubernetes-dashboard        ClusterIP   10.96.233.253   <none>        443/TCP    87s
+learntechb@cloudshell:~ (us-phoenix-1)$ kubectl  -n kubernetes-dashboard  edit svc kubernetes-dashboard
+service/kubernetes-dashboard edited
+learntechb@cloudshell:~ (us-phoenix-1)$ kubectl  -n kubernetes-dashboard  get svc
+NAME                        TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)         AGE
+dashboard-metrics-scraper   ClusterIP      10.96.255.141   <none>        8000/TCP        2m10s
+kubernetes-dashboard        LoadBalancer   10.96.233.253   <pending>     443:31246/TCP   2m11s
+learntechb@cloudshell:~ (us-phoenix-1)$ 
+```
+
+### dashboard 
+
+```
+ kubectl  -n kubernetes-dashboard  get secret
+NAME                               TYPE                                  DATA   AGE
+default-token-pxk86                kubernetes.io/service-account-token   3      6m20s
+kubernetes-dashboard-certs         Opaque                                0      6m19s
+kubernetes-dashboard-csrf          Opaque                                1      6m19s
+kubernetes-dashboard-key-holder    Opaque                                2      6m19s
+kubernetes-dashboard-token-bqg4s   kubernetes.io/service-account-token   3      6m20s
+learntechb@cloudshell:~ (us-phoenix-1)$ kubectl  -n kubernetes-dashboard  describe  secret kubernetes-dashboard-token-bqg4s
+Name:         kubernetes-dashboard-token-bqg4s
+Namespace:    kubernetes-dashboard
+Labels:       <none>
+Annotations:  kubernetes.io/service-account.name: kubernetes-dashboard
+              kubernetes.io/service-account.uid: 881f595e-1ba6-4308-af1a-a70166c3d9d3
+
+Type:  kubernetes.io/service-account-token
+
+Data
+====
+ca.crt:     1285 bytes
+namespace:  20 bytes
+token:      eyJhbGciOiJSUzI1NiIsImtpZCI6Inh2RGxndmtRRk5VVjdr
+```
+
+### giving permission to dashboard 
+
+```
+ kubectl create clusterrolebinding bind111 --clusterrole=cluster-admin --serviceaccount=kubernetes-dashboard:kubernetes-dashboard
+clusterrolebinding.rbac.authorization.k8s.io/bind111 created
+```
+
+### webapp with DB 
+
+### Db 
+
+```
+ kubectl create deploy db1  --image=mysql:5.6 --port 3306 --dry-run=client -o yaml >db.yaml
+ 
+```
+
+### cluster IP type service 
+
+```
+kubectl get deploy 
+NAME         READY   UP-TO-DATE   AVAILABLE   AGE
+amitdeploy   1/1     1            1           12m
+d1           3/3     3            3           76m
+db1          1/1     1            1           3m28s
+ganeshdep    0/1     1            0           13m
+sameeerdep   1/1     1            1           11m
+learntechb@cloudshell:~ (us-phoenix-1)$ kubectl expose deploy db1 --type ClusterIP --port 3306 
+service/db1 exposed
+learntechb@cloudshell:~ (us-phoenix-1)$ kubectl get svc 
+NAME         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+db1          ClusterIP   10.96.175.135   <none>        3306/TCP   5s
+kubernetes   ClusterIP   10.96.0.1       <none>        443/TCP    87m
+```
+
+### creating lb type service 
+
+```
+ kubectl expose deploy webapp111 --type LoadBalancer --port 80 --name websvc1 
+service/websvc1 exposed
+learntechb@cloudshell:~ (us-phoenix-1)$ kubectl get svc
+NAME         TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+db1          ClusterIP      10.96.175.135   <none>        3306/TCP       7m23s
+kubernetes   ClusterIP      10.96.0.1       <none>        443/TCP        94m
+websvc1      LoadBalancer   10.96.88.5      <pending>     80:31345/TCP   5s
+learntechb@cloudshell:~ (us-phoenix-1)$ 
+```
