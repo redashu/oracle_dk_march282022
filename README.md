@@ -208,4 +208,98 @@ ashu-space        Active   4s
 
 ```
 
+### setting default namespace 
+
+```
+kubectl  get  po 
+No resources found in default namespace.
+[ashu@docker-new-vm k8s_apps]$ 
+[ashu@docker-new-vm k8s_apps]$ kubectl  config  set-context  --current  --namespace  ashu-space 
+Context "kubernetes-admin@kubernetes" modified.
+[ashu@docker-new-vm k8s_apps]$ 
+[ashu@docker-new-vm k8s_apps]$ kubectl  get  po 
+No resources found in ashu-space namespace.
+```
+
+### 
+
+```
+kubectl  config get-contexts 
+CURRENT   NAME                          CLUSTER      AUTHINFO           NAMESPACE
+*         kubernetes-admin@kubernetes   kubernetes   kubernetes-admin   ashu-space
+[ashu@docker-new-vm k8s_apps]$ 
+```
+### deploy pod 
+
+```
+ kubectl apply -f  webapp.yaml 
+pod/ashuwebapp configured
+[ashu@docker-new-vm k8s_apps]$ 
+[ashu@docker-new-vm k8s_apps]$ kubectl   get  po 
+NAME         READY   STATUS    RESTARTS   AGE
+ashuwebapp   1/1     Running   0          35s
+[ashu@docker-new-vm k8s_apps]$ 
+
+```
+
+### creating service from a running pod 
+
+```
+kubectl  get  pod 
+NAME         READY   STATUS    RESTARTS   AGE
+ashuwebapp   1/1     Running   0          118s
+[ashu@docker-new-vm k8s_apps]$ kubectl  expose pod ashuwebapp  --type NodePort  --port 1234 --target-port  80  --name  ashusvc1 
+service/ashusvc1 exposed
+[ashu@docker-new-vm k8s_apps]$ kubectl  get  svc
+NAME       TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+ashusvc1   NodePort   10.101.112.235   <none>        1234:32264/TCP   36s
+
+```
+
+## Multi stage dockerfile 
+
+<img src="multistage.png">
+
+### deploy ocr image to k8s 
+
+```
+kubectl   run  ashujavaapp --image=phx.ocir.io/axmbtg8judkl/tomcatapp:v1    --port  8080  --dry-run=client -oyaml  >privateapp.yaml 
+
+```
+
+### introduction to secret in k8s 
+
+<img src="secret.png">
+
+### creating secret to store OCR credential 
+
+```
+kubectl create  secret  
+Create a secret using specified subcommand.
+
+Available Commands:
+  docker-registry Create a secret for use with a Docker registry
+  generic         Create a secret from a local file, directory, or literal value
+  tls             Create a TLS secret
+
+Usage:
+  kubectl create secret [flags] [options]
+
+Use "kubectl <command> --help" for more information about a given command.
+Use "kubectl options" for a list of global command-line options (applies to all commands).
+[ashu@docker-new-vm k8s_apps]$ kubectl create  secret  docker-registry  ashuappsec  --docker-server phx.ocir.io --docker-username  axmbtg8judkl/learntechbyme@gmail.com  --docker-password="5QH}bG04nWJ-dvS72v6O"
+secret/ashuappsec created
+```
+
+### use secret and run it 
+
+```
+kubectl replace -f  privateapp.yaml  --force 
+pod "ashujavaapp" deleted
+pod/ashujavaapp replaced
+[ashu@docker-new-vm k8s_apps]$ kubectl get   po 
+NAME          READY   STATUS              RESTARTS   AGE
+ashujavaapp   0/1     ContainerCreating   0          12s
+
+```
 
