@@ -303,3 +303,71 @@ ashujavaapp   0/1     ContainerCreating   0          12s
 
 ```
 
+### task history 
+
+```
+kubectl create  namespace  ashuk8s1  --dry-run=client -oyaml >mytask.yaml 
+  724  kubectl  run ashupod1 --image=ubuntu --command sleep 1000 --namespace  ashuk8s1 --dry-run=client -oyaml  >>mytask.yaml 
+  725  kubectl create  service nodeport  ashusvc123 --tcp 1234:80 --namespace  ashuk8s1 --dry-run=client -oyaml >>mytask.yaml 
+  726  kubectl apply -f mytask.yaml 
+  727  kubectl  get pod,svc -n ashuk8s1 
+  728  kubectl delete -f  mytask.yaml 
+  
+```
+
+### Intro to deployment 
+
+<img src="deploy.png">
+
+## creating deployment 
+
+```
+kubectl create deployment ashudep  --image=dockerashu/customerapp:30thmarch2022   --port 80 --dry-run=client  -o yaml  >deployment.yaml 
+```
+
+### deploy 
+
+```
+ 440  kubectl create deployment d1 --image=dockerashu/customerapp:30thmarch2022 --port 80 
+  441  kubectl get deploy 
+  442  kubectl get  po 
+  443  kubectl get deploy 
+  444  history 
+  445  kubectl get deploy 
+  446  kubectl get po 
+  447  kubectl delete pod d1-74858f96cd-z7qsz
+  448  kubectl get po 
+  449  kubectl get deploy 
+  450  kubectl scale deploy d1 --replicas=3
+  451  kubectl get po 
+  
+ ```
+ 
+ ### loadbalancer service 
+ 
+ <img src="svclb.png">
+ 
+ ### creating lb service 
+ 
+ ```
+ kubectl get deploy 
+NAME   READY   UP-TO-DATE   AVAILABLE   AGE
+d1     3/3     3            3           15m
+learntechb@cloudshell:~ (us-phoenix-1)$ kubectl get po 
+NAME                  READY   STATUS    RESTARTS   AGE
+d1-74858f96cd-4xsmh   1/1     Running   0          14m
+d1-74858f96cd-fvs4m   1/1     Running   0          12m
+d1-74858f96cd-mf4f2   1/1     Running   0          12m
+
+----
+
+type: Unsupported value: "LoadBalacer": supported values: "ClusterIP", "ExternalName", "LoadBalancer", "NodePort"
+learntechb@cloudshell:~ (us-phoenix-1)$ kubectl expose deploy  d1 --type LoadBalancer  --port 80 --name ashusvc1
+service/ashusvc1 exposed
+learntechb@cloudshell:~ (us-phoenix-1)$ kubectl get svc
+NAME         TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+ashusvc1     LoadBalancer   10.96.190.176   <pending>     80:32281/TCP   12s
+
+```
+
+
