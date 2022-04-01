@@ -181,4 +181,31 @@ varstore           1      10s
 
 <img src="cm1.png">
 
+### namespaces in k8s
+
+```
+ kubectl  get  po 
+No resources found in default namespace.
+[ashu@docker-new-vm k8s_apps]$ 
+[ashu@docker-new-vm k8s_apps]$ 
+[ashu@docker-new-vm k8s_apps]$ kubectl  get  namespaces 
+NAME              STATUS   AGE
+ajeet-ns          Active   3d16h
+ashu-project      Active   3d16h
+default           Active   29d
+kube-node-lease   Active   3d16h
+kube-public       Active   29d
+kube-system       Active   29d
+manoj-ns          Active   3d16h
+surbhi-ns         Active   3d16h
+[ashu@docker-new-vm k8s_apps]$ kubectl  create  namespace  ashu-space 
+namespace/ashu-space created
+[ashu@docker-new-vm k8s_apps]$ kubectl  get  namespaces 
+NAME              STATUS   AGE
+ajeet-ns          Active   3d16h
+ashu-project      Active   3d16h
+ashu-space        Active   4s
+
+```
+
 
